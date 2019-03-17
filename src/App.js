@@ -10,8 +10,9 @@ class App extends Component {
     apiKey : 'trnsl.1.1.20190120T221839Z.e8a0ed6cc98deffd.e8d058ee5f668313e658b486846d2791f92dde05',
     word: '',
     //TODO: Add a checkbox for different languages
-    language: 'tr',
-    translatedWord: ''
+    language: 'it',
+    translatedWord: '',
+    value:'it'
   }
 
   handleChange = ({target}) =>{
@@ -29,7 +30,16 @@ class App extends Component {
     .then(response => {
       this.setState({translatedWord: response.data.text[0]})
     })
-   }
+  }
+
+  change = event => {
+    this.setState({
+      language: event.target.value
+    })
+    
+    
+  }
+
 
   render() {
     const {word, translatedWord} = this.state;
@@ -47,11 +57,11 @@ class App extends Component {
                onChange={this.handleChange} 
                className="form-control d-flex mx-auto" />
             </div>
-            {/* <select name="lang" id="lang" className="mb-3">
-              <option value="select">Select</option>
+            <select name="lang" onChange={this.change} value={this.state.language} id="lang" className="mb-3">
+              <option value="it">Italian</option>
               <option value="tr">Turkish</option>
               <option value="de">German</option>
-            </select> */}
+            </select>
             <button 
               onClick={this.handleClick} 
               type="submit" 
