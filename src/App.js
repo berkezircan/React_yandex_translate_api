@@ -1,24 +1,27 @@
 import React, { Component } from 'react';
-// import axios from 'axios';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
-
 
 class App extends Component {
   state = {
     apiKey : 'trnsl.1.1.20190120T221839Z.e8a0ed6cc98deffd.e8d058ee5f668313e658b486846d2791f92dde05',
     word: '',
-    //TODO: Add a checkbox for different languages
     language: 'it',
     translatedWord: '',
     value:'it'
   }
-
+  
   handleChange = ({target}) =>{
     this.setState({
       [target.name]: target.value
     })
+  }
+
+  change = event => {
+    this.setState({
+      language: event.target.value
+    })  
   }
 
   handleClick = e => {
@@ -31,21 +34,12 @@ class App extends Component {
       this.setState({translatedWord: response.data.text[0]})
     })
   }
-
-  change = event => {
-    this.setState({
-      language: event.target.value
-    })
-    
-    
-  }
-
-
+  
   render() {
-    const {word, translatedWord} = this.state;
+    const { word, translatedWord, language } = this.state;
     return (
       <div className="App">
-        <div className="container text-center">
+        <div className="container text-center p-3">
           <form className="mb-2">
             <h1 className="display-4">Translate App</h1>
             <div className="form-group ">
@@ -57,10 +51,13 @@ class App extends Component {
                onChange={this.handleChange} 
                className="form-control d-flex mx-auto" />
             </div>
-            <select name="lang" onChange={this.change} value={this.state.language} id="lang" className="mb-3">
+            <select name="lang" onChange={this.change} value={language} id="lang" className="mb-3">
               <option value="it">Italian</option>
               <option value="tr">Turkish</option>
               <option value="de">German</option>
+              <option value="fr">French</option>
+              <option value="es">Spanish</option>
+              <option value="pt">Portuguese</option>
             </select>
             <button 
               onClick={this.handleClick} 
@@ -69,7 +66,12 @@ class App extends Component {
               Translate
             </button>
           </form>
-          <p className="mt-2">{translatedWord}</p>
+          {
+            translatedWord.length === 0 ? 
+            null : 
+            <p className="mt-2 font-weight-bold  text-danger"> <span className="text-dark">Translated Word:</span> {translatedWord}</p>
+          }
+          
         </div>
       </div>
     );
