@@ -1,42 +1,26 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 
-class App extends Component {
-  state = {
-    apiKey : 'trnsl.1.1.20190120T221839Z.e8a0ed6cc98deffd.e8d058ee5f668313e658b486846d2791f92dde05',
-    word: '',
-    language: 'it',
-    translatedWord: '',
-    value:'it'
-  }
-  
-  handleChange = ({target}) =>{
-    this.setState({
-      [target.name]: target.value
-    })
-  }
+const App = () => {
+  const [apiKey, ] = useState('trnsl.1.1.20190120T221839Z.e8a0ed6cc98deffd.e8d058ee5f668313e658b486846d2791f92dde05');
+  const [word, setWord] = useState('');
+  const [language, setLanguage] = useState('it');
+  const [translatedWord, setTranslatedWord] = useState('');
 
-  change = event => {
-    this.setState({
-      language: event.target.value
-    })  
-  }
+  const handleChange = event => setWord(event.target.value) 
 
-  handleClick = e => {
+  const change = event => setLanguage(event.target.value) 
+
+  const handleClick = e => {
     e.preventDefault();
     
-    const {apiKey, word, language} = this.state;
-       
     axios.get(`https://translate.yandex.net/api/v1.5/tr.json/translate?key=${apiKey}&text=${word}&lang=${language}`)
     .then(response => {
-      this.setState({translatedWord: response.data.text[0]})
+      setTranslatedWord(response.data.text[0])
     })
   }
-  
-  render() {
-    const { word, translatedWord, language } = this.state;
     return (
       <div className="App">
         <div className="container text-center p-3">
@@ -48,10 +32,10 @@ class App extends Component {
                name="word" 
                placeholder="Translated Word"
                value={word}
-               onChange={this.handleChange} 
+               onChange={handleChange} 
                className="form-control d-flex mx-auto" />
             </div>
-            <select name="lang" onChange={this.change} value={language} id="lang" className="mb-3">
+            <select name="lang" onChange={change} value={language} id="lang" className="mb-3">
               <option value="it">Italian</option>
               <option value="tr">Turkish</option>
               <option value="de">German</option>
@@ -60,7 +44,7 @@ class App extends Component {
               <option value="pt">Portuguese</option>
             </select>
             <button 
-              onClick={this.handleClick} 
+              onClick={handleClick} 
               type="submit" 
               className="btn btn-primary btn-block d-flex mx-auto text-center ">
               Translate
@@ -75,7 +59,6 @@ class App extends Component {
         </div>
       </div>
     );
-  }
 }
 
 export default App;
